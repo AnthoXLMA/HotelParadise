@@ -4,6 +4,23 @@ import Client from '../models/Client.js'; // extension .js obligatoire en ESM
 
 const router = express.Router();
 
+// Middleware pour vérifier le token JWT
+export const verifyToken = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) return res.status(401).json({ message: 'Accès refusé : token manquant' });
+
+  const token = authHeader.split(' ')[1]; // "Bearer <token>"
+  if (!token) return res.status(401).json({ message: 'Accès refusé : token manquant' });
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded; // ajouter les infos du token à la requête
+    next();
+  } catch (err) {
+    return res.status(401).json({ message: 'Token invalide' });
+  }
+};
+
 // REGISTER
 router.post('/register', async (req, res) => {
   try {
@@ -37,6 +54,17 @@ router.post('/login', async (req, res) => {
       token,
       client: { id: client._id, name: client.name, email: client.email },
     });
+  } catch (err) {
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+});
+
+// PROFILE (exemple de route protégée)
+router.get('/profile', verifyToken, async (req, res) => {
+  try {
+    const client = await Client.findById(req.user.id).select('-password');
+    if (!client) return res.status(404).json({ message: 'Utilisateur non trouvé' });
+    res.json(client);
   } catch (err) {
     res.status(500).json({ message: 'Erreur serveur' });
   }

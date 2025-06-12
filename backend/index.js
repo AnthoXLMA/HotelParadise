@@ -2,11 +2,12 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
-
 import authRoutes from './routes/auth.routes.js';
 import clientRoutes from './routes/client.routes.js';
 import hotelInfoRoutes from './routes/hotelInfo.routes.js';
 import conciergeRoutes from './routes/concierge.routes.js';
+import hotelierRoutes from './routes/hotelier.routes.js';
+
 
 dotenv.config();
 
@@ -40,6 +41,8 @@ app.use('/api/clients', clientRoutes);
 app.use('/api/hotel-info', hotelInfoRoutes);
 app.use('/api/hotel', hotelInfoRoutes);
 app.use('/api/concierge', conciergeRoutes);
+app.use('/api/hotelier', hotelierRoutes);
+
 
 const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/hotelparadise';
 
