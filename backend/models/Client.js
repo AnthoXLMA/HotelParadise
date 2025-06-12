@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+import mongoose from 'mongoose';
+import bcrypt from 'bcrypt';
 
 const clientSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -19,4 +19,6 @@ clientSchema.methods.comparePassword = function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-module.exports = mongoose.model('Client', clientSchema);
+const Client = mongoose.model('Client', clientSchema);
+
+export default Client;

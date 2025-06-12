@@ -1,12 +1,13 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const conciergeRequestSchema = new mongoose.Schema({
-  clientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Client', required: true },
-  requestType: { type: String, required: true }, // ex: taxi, restaurant, ménage
-  description: String,
-  status: { type: String, enum: ['pending', 'in_progress', 'completed'], default: 'pending' },
+  client: { type: mongoose.Schema.Types.ObjectId, ref: 'Client', required: true },
+  service: { type: String, required: true },
+  details: { type: String, required: true },
+  status: { type: String, default: 'En attente' },
   createdAt: { type: Date, default: Date.now },
-  updatedAt: Date
 });
 
-module.exports = mongoose.model('ConciergeRequest', conciergeRequestSchema);
+const ConciergeRequest = mongoose.model('ConciergeRequest', conciergeRequestSchema);
+
+export default ConciergeRequest;

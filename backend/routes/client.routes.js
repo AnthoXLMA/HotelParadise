@@ -1,6 +1,7 @@
-const express = require('express');
+import express from 'express';
+import CheckIn from '../models/CheckIn.js';  // Note le .js et la casse exacte
+
 const router = express.Router();
-const Client = require('../models/Client');
 
 // POST /api/clients/checkin
 router.post('/checkin', async (req, res) => {
@@ -20,7 +21,4 @@ router.post('/checkin', async (req, res) => {
   }
 });
 
-module.exports = router;
-
-
-
+export default router;

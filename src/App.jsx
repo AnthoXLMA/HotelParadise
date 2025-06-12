@@ -10,7 +10,9 @@ import Home from "./pages/Home";
 import Register from './components/Auth/Register';
 import Login from './components/Auth/Login';
 import Dashboard from './components/Dashboard';
-
+import ConciergeServices from './pages/ConciergeServices';
+import RequestHistory from "./pages/RequestHistory";
+import PraticalInfo from "./pages/PraticalInfo";
 
 function App() {
   return (
@@ -21,10 +23,14 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/services" element={<ConciergeServices />} />
+        <Route path="/services/history" element={<RequestHistory />} />
+        <Route path="/infos" element={<PraticalInfo />} />
       </Routes>
     </BrowserRouter>
   );
 }
 
 export default App;
+
 
