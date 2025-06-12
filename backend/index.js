@@ -14,7 +14,7 @@ const app = express();
 
 app.use(express.json());
 
-const allowedOrigins = ['http://localhost:5173', 'http://localhost:5000', 'https://app.hotel-conciergerie.com'];
+const allowedOrigins = ['http://localhost:5173', 'http://localhost:5001', 'https://app.hotel-conciergerie.com'];
 
 app.use(cors({
   origin: function(origin, callback) {
@@ -51,7 +51,7 @@ app.get('/', (req, res) => {
   res.send('HotelParadise API backend is running 🚀');
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`🚀 Serveur démarré sur http://localhost:${PORT}`);
 });
