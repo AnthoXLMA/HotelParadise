@@ -1,7 +1,7 @@
 // src/pages/Login.jsx
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../../services/api"; // ton instance axios
+import api from "../services/api"; // ton instance axios
 
 export default function Login() {
   const [email, setEmail] = useState("");

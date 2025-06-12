@@ -1,44 +1,56 @@
-// backend/index.js
-require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import dotenv from 'dotenv';
 
+import authRoutes from './routes/auth.routes.js';
+import clientRoutes from './routes/client.routes.js';
+import hotelInfoRoutes from './routes/hotelInfo.routes.js';
+import conciergeRoutes from './routes/concierge.routes.js';
 
-// Crée l'app en premier
+dotenv.config();
+
 const app = express();
 
-// Middlewares
-app.use(cors());
 app.use(express.json());
 
-//
-const authRoutes = require('./routes/auth.routes');
-app.use('/api/auth', authRoutes);
+const allowedOrigins = ['http://localhost:5173', 'http://localhost:5000', 'https://app.hotel-conciergerie.com'];
 
-// Connexion MongoDB
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+}));
+
+// Middleware pour attraper erreur CORS et répondre 403
+app.use((err, req, res, next) => {
+  if (err.message === 'Not allowed by CORS') {
+    return res.status(403).json({ message: 'Accès refusé par la politique CORS' });
+  }
+  next(err);
+});
+
+app.use('/api/auth', authRoutes);
+app.use('/api/clients', clientRoutes);
+app.use('/api/hotel-info', hotelInfoRoutes);
+app.use('/api/hotel', hotelInfoRoutes);
+app.use('/api/concierge', conciergeRoutes);
+
 const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/hotelparadise';
 
 mongoose.connect(mongoURI)
   .then(() => console.log('✅ Connecté à MongoDB'))
-  .catch((err) => console.error('❌ Erreur de connexion à MongoDB:', err));
+  .catch(err => console.error('❌ Erreur de connexion à MongoDB:', err));
 
-// Import des routes
-const clientRoutes = require('./routes/client.routes');
-const hotelInfoRoutes = require('./routes/hotelInfo.routes');
-const conciergeRoutes = require('./routes/concierge.routes');
-
-// Utilisation des routes
-app.use('/api/clients', require('./routes/client.routes'));
-app.use('/api/hotel-info', hotelInfoRoutes);
-app.use('/api/concierge', conciergeRoutes);
-
-// Route de test
 app.get('/', (req, res) => {
   res.send('HotelParadise API backend is running 🚀');
 });
 
-// Lancement du serveur
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Serveur démarré sur http://localhost:${PORT}`);

@@ -1,7 +1,8 @@
-const express = require('express');
+import express from 'express';
+import jwt from 'jsonwebtoken';
+import Client from '../models/Client.js'; // extension .js obligatoire en ESM
+
 const router = express.Router();
-const Client = require('../models/Client');
-const jwt = require('jsonwebtoken');
 
 // REGISTER
 router.post('/register', async (req, res) => {
@@ -32,10 +33,13 @@ router.post('/login', async (req, res) => {
       expiresIn: '1d',
     });
 
-    res.json({ token, client: { id: client._id, name: client.name, email: client.email } });
+    res.json({
+      token,
+      client: { id: client._id, name: client.name, email: client.email },
+    });
   } catch (err) {
     res.status(500).json({ message: 'Erreur serveur' });
   }
 });
 
-module.exports = router;
+export default router;
