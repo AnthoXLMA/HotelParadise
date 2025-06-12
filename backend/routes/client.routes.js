@@ -3,6 +3,10 @@ import CheckIn from '../models/CheckIn.js';  // Note le .js et la casse exacte
 
 const router = express.Router();
 
+router.get('/', (req, res) => {
+  res.send('Client route is active ✅');
+});
+
 // POST /api/clients/checkin
 router.post('/checkin', async (req, res) => {
   const { name, surname, email, bookingNumber } = req.body;
